@@ -5,7 +5,7 @@ FROM base as deps
 
 WORKDIR /app
 
-COPY package.json ./
+COPY package.json package-lock.json ./
 RUN npm ci --force
 
 # 2. Rebuild the souece code
