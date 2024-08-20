@@ -3,12 +3,12 @@ import { verifySession } from "@/server/session";
 import LogoutButton from "@/components/LogoutButton";
 
 export default async function HeaderButtons() {
-  const { isAuth, name } = await verifySession();
+  const { isAuth, username } = await verifySession();
 
   if (isAuth) {
     return (
       <div className="flex w-[120px] items-center justify-end gap-4">
-        {name}
+        {username}
         <LogoutButton />
       </div>
     );
