@@ -6,7 +6,7 @@ FROM base as deps
 WORKDIR /app
 
 COPY package.json ./
-RUN npm ci
+RUN npm ci --force
 
 # 2. Rebuild the souece code
 FROM base AS builder
