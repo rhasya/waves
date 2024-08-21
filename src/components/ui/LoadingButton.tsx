@@ -1,21 +1,19 @@
 "use client";
 
-import type { MouseEventHandler, ReactNode } from "react";
 import { useFormStatus } from "react-dom";
 import { Loader2 } from "lucide-react";
+import Button from "@/components/ui/Button";
 
 export default function LoadingButton({
   children,
-  onClick,
-}: {
-  children: ReactNode;
-  onClick?: MouseEventHandler<HTMLButtonElement>;
-}) {
+  disabled,
+  ...rest
+}: Omit<React.ComponentProps<typeof Button>, "type">) {
   const { pending } = useFormStatus();
 
   return (
-    <button type="submit" onClick={onClick}>
+    <Button type="submit" disabled={pending || disabled} {...rest}>
       {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : children}
-    </button>
+    </Button>
   );
 }

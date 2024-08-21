@@ -1,8 +1,9 @@
 
 create table users(
                       id serial primary key,
-                      name text unique,
-                      password text not null
+                      name text not null unique,
+                      password text not null,
+                      enable boolean not null default false
 );
 
 create table waves(

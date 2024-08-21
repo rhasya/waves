@@ -5,6 +5,7 @@ import Button from "@/components/ui/Button";
 import LinkButton from "@/components/ui/LinkButton";
 import TextField from "@/components/ui/TextField";
 import { actionLogin } from "@/server/actions";
+import LoadingButton from "@/components/ui/LoadingButton";
 
 export default function LoginForm() {
   const nameId = useId();
@@ -14,7 +15,7 @@ export default function LoginForm() {
     const { name, password } = Object.fromEntries(payload);
     if (name && password) {
       actionLogin(payload).then((res) => {
-        if (!res.ok) {
+        if (res?.ok === false) {
           alert("Unauthorized.");
         }
       });
@@ -35,7 +36,7 @@ export default function LoginForm() {
         <TextField type="password" id={passwordId} name="password" className="col-span-4" />
       </div>
       <div className="flex flex-col gap-2">
-        <Button type="submit">Sign In</Button>
+        <LoadingButton>Sign In</LoadingButton>
         <LinkButton href="/signup" variant="secondary">
           Create Account
         </LinkButton>

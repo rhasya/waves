@@ -1,6 +1,7 @@
 import Link from "next/link";
 import LogoutButton from "@/components/LogoutButton";
 import { verifySession } from "@/server/session";
+import LinkButton from "@/components/ui/LinkButton";
 
 export default async function HeaderButtons() {
   const { isAuth, username } = await verifySession();
@@ -13,12 +14,9 @@ export default async function HeaderButtons() {
           <LogoutButton />
         </>
       ) : (
-        <Link
-          className="flex h-9 items-center rounded border px-3 hover:bg-slate-100 disabled:pointer-events-none"
-          href={"/login"}
-        >
+        <LinkButton href="/login" variant="secondary">
           Sign In
-        </Link>
+        </LinkButton>
       )}
     </div>
   );

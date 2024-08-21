@@ -3,20 +3,23 @@
 import React, { ButtonHTMLAttributes } from "react";
 import { cva, VariantProps } from "class-variance-authority";
 
-const buttonVar = cva("h-9 rounded border px-3 font-medium disabled:pointer-events-none transition-colors", {
-  variants: {
-    variant: {
-      primary: "bg-slate-600 text-white hover:bg-slate-600/90",
-      secondary: "hover:bg-slate-100 text-black",
+const buttonVar = cva(
+  "h-9 rounded border px-3 font-medium disabled:pointer-events-none transition-colors flex justify-center items-center",
+  {
+    variants: {
+      variant: {
+        primary: "bg-slate-600 text-white hover:bg-slate-600/90",
+        secondary: "hover:bg-slate-100 text-black",
+      },
+    },
+    defaultVariants: {
+      variant: "primary",
     },
   },
-  defaultVariants: {
-    variant: "primary",
-  },
-});
+);
 
 interface ButtonProps
-  extends Pick<ButtonHTMLAttributes<HTMLButtonElement>, "type" | "children" | "className" | "onClick">,
+  extends Pick<ButtonHTMLAttributes<HTMLButtonElement>, "type" | "children" | "className" | "onClick" | "disabled">,
     VariantProps<typeof buttonVar> {}
 
 export default function Button({ children, className, type, variant, onClick }: ButtonProps) {

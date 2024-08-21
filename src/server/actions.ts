@@ -62,7 +62,13 @@ export async function actionLogin(formData: FormData) {
   const user = await db
     .select()
     .from(users)
-    .where(and(eq(users.name, name as string), eq(users.password, hash("sha256", password as string))));
+    .where(
+      and(
+        eq(users.name, name as string),
+        eq(users.password, hash("sha256", password as string)),
+        eq(users.enable, true),
+      ),
+    );
 
   if (user.length > 0) {
     createSession(JSON.stringify({ username: name as string, userId: user[0].id }));
@@ -74,5 +80,10 @@ export async function actionLogin(formData: FormData) {
 
 export async function actionLogout() {
   deleteSession();
+  redirect("/");
+}
+
+export async function actionCreateUser(user: { name: string; password: string }) {
+  await db.insert(users).values({ name: user.name, password: hash("sha256", user.password) });
   redirect("/");
 }

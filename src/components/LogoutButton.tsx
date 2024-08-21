@@ -8,5 +8,9 @@ export default function LogoutButton() {
     actionLogout();
   }
 
-  return <Button onClick={handleClick}>Sign Out</Button>;
+  return (
+    <Button type="button" variant="secondary" onClick={handleClick}>
+      Sign Out
+    </Button>
+  );
 }

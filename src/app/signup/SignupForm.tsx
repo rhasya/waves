@@ -1,36 +1,56 @@
 "use client";
 
-import { useId } from "react";
-import { z } from "zod";
+import { useId, useState } from "react";
+import { z, ZodError } from "zod";
 import Button from "@/components/ui/Button";
 import LinkButton from "@/components/ui/LinkButton";
 import TextField from "@/components/ui/TextField";
+import { actionCreateUser } from "@/server/actions";
+import { redirect } from "next/navigation";
 
 const createAccountSchema = z.object({
-  name: z.string(),
-  password: z.string(),
-  passwordConfirm: z.string(),
+  name: z.string().min(1, "Name is required."),
+  password: z.string().min(1, "Password is required."),
+  passwordConfirm: z.string().min(1, "Password confirm is required."),
 });
 
 export default function SignupForm() {
+  const [error, setError] = useState<string | undefined>(undefined);
+  const [pending, setPending] = useState(false);
+
   const nameId = useId();
   const passwordId = useId();
   const passwordConfirmId = useId();
 
-  function action(formData: FormData) {
+  async function action(formData: FormData) {
     try {
-      const f = createAccountSchema.parse(Object.fromEntries(formData));
-      if (f.password !== f.passwordConfirm) {
-        throw new Error("Password and confirm are different.");
+      const u = createAccountSchema.parse(Object.fromEntries(formData));
+      if (u.password !== u.passwordConfirm) {
+        setError("Password and confirm are different.");
+        return;
       }
-      // TODO: call server action
+
+      setPending(true);
+      try {
+        await actionCreateUser(u);
+      } finally {
+        setPending(false);
+      }
     } catch (e) {
-      console.error(e);
+      if (e instanceof ZodError) {
+        setError(e.errors[0].message);
+      } else {
+        console.error(e);
+      }
     }
   }
 
   return (
-    <form action={action} className="contents">
+    <form
+      action={action}
+      className="contents data-[pending]:pointer-events-none"
+      data-pending={pending ? "" : undefined}
+    >
       <h1 className="text-center text-3xl font-bold">Create Account</h1>
       <div className="grid grid-cols-5 items-center gap-x-2 gap-y-4">
         <label htmlFor={nameId} className="text-right">
@@ -52,6 +72,7 @@ export default function SignupForm() {
           Cancel
         </LinkButton>
       </div>
+      <div className="text-sm text-red-600">{error}</div>
     </form>
   );
 }

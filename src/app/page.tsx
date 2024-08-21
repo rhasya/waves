@@ -19,7 +19,7 @@ export default async function Home() {
           </div>
         )}
         <div className="mt-4">
-          <WaveList wavesPromise={waves} />
+          <WaveList auth={session.isAuth} wavesPromise={waves} />
         </div>
       </Main>
     </>
