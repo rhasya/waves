@@ -1,8 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { Heart } from "lucide-react";
 import { actionLikeClick } from "@/server/actions";
-import { useState } from "react";
 
 export default function Wave({
   id,

@@ -1,9 +1,10 @@
 "use client";
 
 import { useId } from "react";
-import { actionLogin } from "@/server/actions";
-import TextField from "@/components/ui/TextField";
 import Button from "@/components/ui/Button";
+import LinkButton from "@/components/ui/LinkButton";
+import TextField from "@/components/ui/TextField";
+import { actionLogin } from "@/server/actions";
 
 export default function LoginForm() {
   const nameId = useId();
@@ -12,13 +13,11 @@ export default function LoginForm() {
   function preAction(payload: FormData) {
     const { name, password } = Object.fromEntries(payload);
     if (name && password) {
-      actionLogin(payload)
-        .then((res) => {
-          if (!res.ok) {
-            alert("Unauthorized.");
-          }
-        })
-        .catch((error) => {});
+      actionLogin(payload).then((res) => {
+        if (!res.ok) {
+          alert("Unauthorized.");
+        }
+      });
     }
   }
 
@@ -36,8 +35,10 @@ export default function LoginForm() {
         <TextField type="password" id={passwordId} name="password" className="col-span-4" />
       </div>
       <div className="flex flex-col gap-2">
-        <button className="h-9 rounded border bg-slate-600 text-white">Sign In</button>
-        <Button>Create Account</Button>
+        <Button type="submit">Sign In</Button>
+        <LinkButton href="/signup" variant="secondary">
+          Create Account
+        </LinkButton>
       </div>
     </form>
   );

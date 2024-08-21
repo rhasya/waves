@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
-import Main from "@/components/Main";
-import WaveWriter from "@/components/ui/WaveWriter";
+import Main from "@/components/ui/Main";
 import WaveList from "@/components/ui/WaveList";
+import WaveWriter from "@/components/ui/WaveWriter";
 import { getWaves } from "@/server/actions";
 import { verifySession } from "@/server/session";
 

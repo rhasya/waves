@@ -1,9 +1,9 @@
 "use server";
 
 import { hash } from "node:crypto";
+import { and, eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { and, count, desc, eq, sql } from "drizzle-orm";
 
 import { db } from "@/db";
 import { likes, users, waves } from "@/db/schema";
@@ -14,10 +14,7 @@ export async function actionCreate(payload: FormData) {
   const session = await verifySession();
 
   if (contents && session.isAuth) {
-    const res = await db
-      .insert(waves)
-      .values({ contents: contents, userId: session.userId, createdAt: new Date() })
-      .execute();
+    await db.insert(waves).values({ contents: contents, userId: session.userId, createdAt: new Date() }).execute();
     revalidatePath("/");
   }
 }
@@ -39,8 +36,7 @@ export async function getWaves() {
      order by created_at desc
   `);
 
-  const result = rows.map(({ like_count, ...rest }) => ({ ...rest, likeCount: like_count }));
-  return result;
+  return rows.map(({ like_count, ...rest }) => ({ ...rest, likeCount: like_count }));
 }
 
 export async function actionLikeClick(waveId: number) {

@@ -1,10 +1,5 @@
-import React from "react";
-
-interface TextFieldProps {
-  className?: string;
-  id?: string;
-  name?: string;
-  placeholder?: string;
+interface TextFieldProps
+  extends Pick<React.InputHTMLAttributes<HTMLInputElement>, "className" | "id" | "name" | "placeholder" | "maxLength"> {
   type?: "text" | "password";
 }
 
