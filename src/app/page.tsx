@@ -4,6 +4,7 @@ import WaveList from "@/components/ui/WaveList";
 import WaveWriter from "@/components/ui/WaveWriter";
 import { getWaves } from "@/server/actions";
 import { verifySession } from "@/server/session";
+import Footer from "@/components/Footer";
 
 export default async function Home() {
   const session = await verifySession();
@@ -22,6 +23,7 @@ export default async function Home() {
           <WaveList auth={session.isAuth} wavesPromise={waves} />
         </div>
       </Main>
+      <Footer />
     </>
   );
 }

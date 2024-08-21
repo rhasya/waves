@@ -25,10 +25,13 @@ export async function getWaves() {
   const rows: {
     id: number;
     contents: string;
+    created_at: Date;
+    name: string;
     like: boolean;
     like_count: number;
   }[] = await db.execute(sql`
-    select waves.id, contents, users.name, case when likes.wave_id is not null then true else false end as "like"
+    select waves.id, contents, created_at, users.name
+         , case when likes.wave_id is not null then true else false end as "like"
          , cast((select count(1) from likes where wave_id = waves.id) as integer) as like_count
       from waves
       left join likes on (likes.wave_id = waves.id and likes.user_id = ${session.userId ?? -1})
@@ -36,7 +39,7 @@ export async function getWaves() {
      order by created_at desc
   `);
 
-  return rows.map(({ like_count, ...rest }) => ({ ...rest, likeCount: like_count }));
+  return rows.map(({ like_count, created_at, ...rest }) => ({ ...rest, createdAt: created_at, likeCount: like_count }));
 }
 
 export async function actionLikeClick(waveId: number) {

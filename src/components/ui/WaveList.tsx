@@ -3,7 +3,7 @@
 import { Suspense, use } from "react";
 import Wave from "@/components/ui/Wave";
 
-export default function WaveList({ auth, wavesPromise }: { auth: boolean; wavesPromise: Promise<any[]> }) {
+export default function WaveList({ auth, wavesPromise }: { auth: boolean; wavesPromise: Promise<WaveData[]> }) {
   const waves = use(wavesPromise);
   return (
     <Suspense fallback={<div></div>}>
