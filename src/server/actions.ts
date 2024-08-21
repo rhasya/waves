@@ -18,7 +18,6 @@ export async function actionCreate(payload: FormData) {
       .insert(waves)
       .values({ contents: contents, userId: session.userId, createdAt: new Date() })
       .execute();
-    console.log(res);
     revalidatePath("/");
   }
 }

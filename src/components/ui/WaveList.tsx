@@ -6,7 +6,7 @@ import Wave from "@/components/ui/Wave";
 export default function WaveList({ wavesPromise }: { wavesPromise: Promise<any[]> }) {
   const waves = use(wavesPromise);
   return (
-    <Suspense fallback={<></>}>
+    <Suspense fallback={<div></div>}>
       <div className="flex flex-col gap-4">
         {waves.map((wave) => (
           <Wave key={wave.id} {...wave} />

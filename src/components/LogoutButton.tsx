@@ -1,15 +1,12 @@
 "use client";
 
 import { actionLogout } from "@/server/actions";
+import Button from "@/components/ui/Button";
 
 export default function LogoutButton() {
   function handleClick() {
     actionLogout();
   }
 
-  return (
-    <button className="h-9 rounded border px-3" onClick={handleClick}>
-      Sign Out
-    </button>
-  );
+  return <Button onClick={handleClick}>Sign Out</Button>;
 }

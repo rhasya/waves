@@ -30,7 +30,7 @@ export default function Wave({
 
   return (
     <div className="flex flex-col rounded border p-4">
-      <p className="text-sm">{name}</p>
+      <p className="text-sm text-gray-700">{name}</p>
       <p className="break-all">{contents}</p>
       <div className="flex flex-row items-center justify-end gap-1">
         <button onClick={handleClick} disabled={pending}>

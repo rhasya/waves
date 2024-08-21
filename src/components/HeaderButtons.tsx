@@ -5,20 +5,21 @@ import LogoutButton from "@/components/LogoutButton";
 export default async function HeaderButtons() {
   const { isAuth, username } = await verifySession();
 
-  if (isAuth) {
-    return (
-      <div className="flex w-[120px] items-center justify-end gap-4">
-        {username}
-        <LogoutButton />
-      </div>
-    );
-  } else {
-    return (
-      <div className="flex w-[120px] items-center justify-end gap-4">
-        <Link className="flex h-9 items-center rounded border px-3" href={"/login"}>
+  return (
+    <div className="flex h-full grow basis-0 items-center justify-end gap-4">
+      {isAuth ? (
+        <>
+          <span>{username}</span>
+          <LogoutButton />
+        </>
+      ) : (
+        <Link
+          className="flex h-9 items-center rounded border px-3 hover:bg-slate-100 disabled:pointer-events-none"
+          href={"/login"}
+        >
           Sign In
         </Link>
-      </div>
-    );
-  }
+      )}
+    </div>
+  );
 }
