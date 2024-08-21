@@ -6,10 +6,12 @@ import Button from "@/components/ui/Button";
 import LinkButton from "@/components/ui/LinkButton";
 import TextField from "@/components/ui/TextField";
 import { actionCreateUser } from "@/server/actions";
-import { redirect } from "next/navigation";
 
 const createAccountSchema = z.object({
-  name: z.string().min(1, "Name is required."),
+  name: z
+    .string()
+    .min(1, "Name is required.")
+    .regex(/^[A-Za-z0-9_]+$/, "Name contains only English letters, numbers and underscore(_)."),
   password: z.string().min(1, "Password is required."),
   passwordConfirm: z.string().min(1, "Password confirm is required."),
 });
@@ -72,7 +74,7 @@ export default function SignupForm() {
           Cancel
         </LinkButton>
       </div>
-      <div className="text-sm text-red-600">{error}</div>
+      {error && <div className="text-sm text-red-600">{error}</div>}
     </form>
   );
 }

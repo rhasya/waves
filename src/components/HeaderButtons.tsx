@@ -1,4 +1,3 @@
-import Link from "next/link";
 import LogoutButton from "@/components/LogoutButton";
 import { verifySession } from "@/server/session";
 import LinkButton from "@/components/ui/LinkButton";

@@ -1,24 +1,38 @@
 "use client";
 
-import { useId } from "react";
-import Button from "@/components/ui/Button";
+import { useId, useState } from "react";
 import LinkButton from "@/components/ui/LinkButton";
 import TextField from "@/components/ui/TextField";
 import { actionLogin } from "@/server/actions";
 import LoadingButton from "@/components/ui/LoadingButton";
+import { z, ZodError } from "zod";
+
+const userSchema = z.object({
+  name: z.string().min(1, "Name is required."),
+  password: z.string().min(1, "Password is requred."),
+});
 
 export default function LoginForm() {
+  const [error, setError] = useState("");
+
   const nameId = useId();
   const passwordId = useId();
 
   function preAction(payload: FormData) {
-    const { name, password } = Object.fromEntries(payload);
-    if (name && password) {
-      actionLogin(payload).then((res) => {
+    try {
+      const u = userSchema.parse(Object.fromEntries(payload));
+
+      actionLogin(u).then((res) => {
         if (res?.ok === false) {
           alert("Unauthorized.");
         }
       });
+    } catch (e) {
+      if (e instanceof ZodError) {
+        setError(e.errors[0].message);
+      } else {
+        console.error(e);
+      }
     }
   }
 
@@ -41,6 +55,7 @@ export default function LoginForm() {
           Create Account
         </LinkButton>
       </div>
+      {error && <div className="text-sm text-red-600">{error}</div>}
     </form>
   );
 }

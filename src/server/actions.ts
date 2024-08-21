@@ -57,21 +57,14 @@ export async function actionLikeClick(waveId: number) {
   revalidatePath("/");
 }
 
-export async function actionLogin(formData: FormData) {
-  const { name, password } = Object.fromEntries(formData);
+export async function actionLogin(u: { name: string; password: string }) {
   const user = await db
     .select()
     .from(users)
-    .where(
-      and(
-        eq(users.name, name as string),
-        eq(users.password, hash("sha256", password as string)),
-        eq(users.enable, true),
-      ),
-    );
+    .where(and(eq(users.name, u.name), eq(users.password, hash("sha256", u.password)), eq(users.enable, true)));
 
   if (user.length > 0) {
-    createSession(JSON.stringify({ username: name as string, userId: user[0].id }));
+    createSession(JSON.stringify({ username: user[0].name, userId: user[0].id }));
     redirect("/");
   } else {
     return { ok: false, statusCode: 401 };
