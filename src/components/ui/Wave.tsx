@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Heart } from "lucide-react";
-import { actionLikeClick } from "@/server/actions";
 import { formatDistance } from "date-fns";
 import { ko } from "date-fns/locale";
+import { Heart } from "lucide-react";
+
+import { actionLikeClick } from "@/server/actions";
 
 export default function Wave({
   auth,

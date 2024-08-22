@@ -1,6 +1,6 @@
 import LogoutButton from "@/components/LogoutButton";
-import { verifySession } from "@/server/session";
 import LinkButton from "@/components/ui/LinkButton";
+import { verifySession } from "@/server/session";
 
 export default async function HeaderButtons() {
   const { isAuth, username } = await verifySession();
