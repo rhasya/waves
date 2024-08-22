@@ -1,9 +1,10 @@
 import Header from "@/components/Header";
-import Main from "@/components/Main";
-import WaveWriter from "@/components/ui/WaveWriter";
+import Main from "@/components/ui/Main";
 import WaveList from "@/components/ui/WaveList";
+import WaveWriter from "@/components/ui/WaveWriter";
 import { getWaves } from "@/server/actions";
 import { verifySession } from "@/server/session";
+import Footer from "@/components/Footer";
 
 export default async function Home() {
   const session = await verifySession();
@@ -19,9 +20,10 @@ export default async function Home() {
           </div>
         )}
         <div className="mt-4">
-          <WaveList wavesPromise={waves} />
+          <WaveList auth={session.isAuth} wavesPromise={waves} />
         </div>
       </Main>
+      <Footer />
     </>
   );
 }

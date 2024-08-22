@@ -1,24 +1,22 @@
-import Link from "next/link";
-import { verifySession } from "@/server/session";
 import LogoutButton from "@/components/LogoutButton";
+import { verifySession } from "@/server/session";
+import LinkButton from "@/components/ui/LinkButton";
 
 export default async function HeaderButtons() {
   const { isAuth, username } = await verifySession();
 
-  if (isAuth) {
-    return (
-      <div className="flex w-[120px] items-center justify-end gap-4">
-        {username}
-        <LogoutButton />
-      </div>
-    );
-  } else {
-    return (
-      <div className="flex w-[120px] items-center justify-end gap-4">
-        <Link className="flex h-9 items-center rounded border px-3" href={"/login"}>
+  return (
+    <div className="flex h-full grow basis-0 items-center justify-end gap-4">
+      {isAuth ? (
+        <>
+          <span>{username}</span>
+          <LogoutButton />
+        </>
+      ) : (
+        <LinkButton href="/login" variant="secondary">
           Sign In
-        </Link>
-      </div>
-    );
-  }
+        </LinkButton>
+      )}
+    </div>
+  );
 }

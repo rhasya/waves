@@ -1,22 +1,38 @@
 "use client";
 
-import { useId } from "react";
+import { useId, useState } from "react";
+import LinkButton from "@/components/ui/LinkButton";
+import TextField from "@/components/ui/TextField";
 import { actionLogin } from "@/server/actions";
+import LoadingButton from "@/components/ui/LoadingButton";
+import { z, ZodError } from "zod";
+
+const userSchema = z.object({
+  name: z.string().min(1, "Name is required."),
+  password: z.string().min(1, "Password is requred."),
+});
 
 export default function LoginForm() {
+  const [error, setError] = useState("");
+
   const nameId = useId();
   const passwordId = useId();
 
   function preAction(payload: FormData) {
-    const { name, password } = Object.fromEntries(payload);
-    if (name && password) {
-      actionLogin(payload)
-        .then((res) => {
-          if (!res.ok) {
-            alert("Unauthorized.");
-          }
-        })
-        .catch((error) => {});
+    try {
+      const u = userSchema.parse(Object.fromEntries(payload));
+
+      actionLogin(u).then((res) => {
+        if (res?.ok === false) {
+          alert("Unauthorized.");
+        }
+      });
+    } catch (e) {
+      if (e instanceof ZodError) {
+        setError(e.errors[0].message);
+      } else {
+        console.error(e);
+      }
     }
   }
 
@@ -27,16 +43,19 @@ export default function LoginForm() {
         <label htmlFor={nameId} className="text-right">
           NAME
         </label>
-        <input type="text" id={nameId} name="name" className="col-span-4 border px-2 py-1" />
+        <TextField type="text" id={nameId} name="name" className="col-span-4" />
         <label htmlFor={passwordId} className="text-right">
           PASSWORD
         </label>
-        <input type="password" id={passwordId} name="password" className="col-span-4 border px-2 py-1" />
+        <TextField type="password" id={passwordId} name="password" className="col-span-4" />
       </div>
       <div className="flex flex-col gap-2">
-        <button className="h-9 rounded border bg-slate-600 text-white">Sign In</button>
-        <button className="h-9 rounded border">Create Account</button>
+        <LoadingButton>Sign In</LoadingButton>
+        <LinkButton href="/signup" variant="secondary">
+          Create Account
+        </LinkButton>
       </div>
+      {error && <div className="text-sm text-red-600">{error}</div>}
     </form>
   );
 }

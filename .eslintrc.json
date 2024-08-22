@@ -1,11 +1,28 @@
 {
   "extends": ["next/core-web-vitals", "plugin:prettier/recommended"],
   "ignorePatterns": ["tailwind.config.ts"],
+  "plugins": ["import"],
   "rules": {
     "prettier/prettier": [
       "error",
       {
         "endOfLine": "auto"
+      }
+    ],
+    "import/order": [
+      "warn",
+      {
+        "pathGroups": [
+          {
+            "pattern": "react*",
+            "group": "builtin",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["react"],
+        "alphabetize": {
+          "order": "asc"
+        }
       }
     ]
   }

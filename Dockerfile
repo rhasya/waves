@@ -6,7 +6,7 @@ FROM base as deps
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci --force
+RUN npm ci
 
 # 2. Rebuild the souece code
 FROM base AS builder

@@ -1,19 +1,25 @@
 "use client";
 
-import { useActionState } from "react";
+import { useState } from "react";
 import { Pen } from "lucide-react";
 import LoadingButton from "@/components/ui/LoadingButton";
 import { actionCreate } from "@/server/actions";
 
 export default function WaveWriter() {
-  const [state, action, pending] = useActionState(preActionCreate, {});
+  const [pending, setPending] = useState(false);
+  const [contents, setContents] = useState("");
 
-  async function preActionCreate(prevState: any, formData: FormData) {
+  async function action(formData: FormData) {
     const { contents } = Object.fromEntries(formData);
     if (contents) {
-      await actionCreate(formData);
+      setPending(true);
+      try {
+        await actionCreate(formData);
+      } finally {
+        setPending(false);
+        setContents("");
+      }
     }
-    return null;
   }
 
   return (
@@ -27,9 +33,12 @@ export default function WaveWriter() {
           placeholder="지금의 기분은?"
           name="contents"
           autoComplete="off"
+          maxLength={200}
           disabled={pending}
+          value={contents}
+          onChange={(e) => setContents(e.target.value)}
         />
-        <LoadingButton>
+        <LoadingButton variant="secondary">
           <Pen className="h-4 w-4" />
         </LoadingButton>
       </form>

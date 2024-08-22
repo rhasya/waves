@@ -1,5 +1,6 @@
 "use client";
 
+import Button from "@/components/ui/Button";
 import { actionLogout } from "@/server/actions";
 
 export default function LogoutButton() {
@@ -8,8 +9,8 @@ export default function LogoutButton() {
   }
 
   return (
-    <button className="h-9 rounded border px-3" onClick={handleClick}>
+    <Button type="button" variant="secondary" onClick={handleClick}>
       Sign Out
-    </button>
+    </Button>
   );
 }
