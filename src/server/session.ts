@@ -1,10 +1,14 @@
 import "server-only";
 
 import { cache } from "react";
+import { type JWTPayload } from "jose";
 import { cookies } from "next/headers";
 
-export function createSession(payload: string) {
-  cookies().set("session", payload, {
+import { decrypt, encrypt } from "@/server/crypto";
+
+export async function createSession(payload: JWTPayload) {
+  const signed = await encrypt(payload);
+  cookies().set("session", signed, {
     httpOnly: true,
     secure: false,
     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
@@ -18,17 +22,18 @@ export function deleteSession() {
 }
 
 export const verifySession = cache(async () => {
-  const cookie = cookies().get("session")?.value;
+  const session = cookies().get("session")?.value;
 
-  if (!cookie) {
+  if (!session) {
     return { isAuth: false };
   }
 
   let user: { username?: string; userId?: number } = {};
   try {
-    user = JSON.parse(cookie);
+    user = (await decrypt(session)) as unknown as { username: string; userId: number };
+    return { isAuth: true, ...user };
   } catch (e) {
-    user = { username: cookie };
+    console.error(e);
+    return { isAuth: false };
   }
-  return { isAuth: true, ...user };
 });

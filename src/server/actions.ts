@@ -19,7 +19,7 @@ export async function actionCreate(payload: FormData) {
   }
 }
 
-export async function getWaves() {
+export async function actionGetWaves() {
   const session = await verifySession();
 
   const rows: {
@@ -67,7 +67,7 @@ export async function actionLogin(u: { name: string; password: string }) {
     .where(and(eq(users.name, u.name), eq(users.password, hash("sha256", u.password)), eq(users.enable, true)));
 
   if (user.length > 0) {
-    createSession(JSON.stringify({ username: user[0].name, userId: user[0].id }));
+    await createSession({ username: user[0].name, userId: user[0].id });
     redirect("/");
   } else {
     return { ok: false, statusCode: 401 };
