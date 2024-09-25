@@ -13,6 +13,11 @@ export async function actionCreate(payload: FormData) {
   const contents = payload.get("contents")!.toString();
   const session = await verifySession();
 
+  // verify contents
+  if (contents.length > 200) {
+    throw new Error("Contents is too long");
+  }
+
   if (contents && session.isAuth) {
     await db.insert(waves).values({ contents: contents, userId: session.userId, createdAt: new Date() }).execute();
     revalidatePath("/");
@@ -82,4 +87,15 @@ export async function actionLogout() {
 export async function actionCreateUser(user: { name: string; password: string }) {
   await db.insert(users).values({ name: user.name, password: hash("sha256", user.password) });
   redirect("/");
+}
+
+export async function actionGetUsers() {
+  return await db.select().from(users);
+}
+
+export async function actionUserEnableUpdate(id: number) {
+  const user = await db.select().from(users).where(eq(users.id, id));
+  if (user.length === 1) {
+    await db.update(users).set({ enable: !user[0].enable }).where(eq(users.id, id));
+  }
 }
